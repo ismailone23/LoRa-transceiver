@@ -10,7 +10,6 @@ MOTOR_IN1, MOTOR_IN2, MOTOR_IN3, MOTOR_IN4 = 13, 14, 15, 16
 MOTOR_EN_A, MOTOR_EN_B = 17, 18
 ULTRASONIC_TRIG, ULTRASONIC_ECHO, DHT_PIN = 10, 11, 12
 PCA_SDA, PCA_SCL = 20, 21
-SERVO_FL, SERVO_FR, SERVO_RL, SERVO_RR = 0, 1, 2, 3
 GPS_UART, GPS_BAUD = 0, 9600
 COMPASS_I2C, COMPASS_SDA, COMPASS_SCL = 1, 26, 27
 
@@ -207,16 +206,6 @@ class Robot:
         self.enb = PWM(Pin(MOTOR_EN_B))
         self.enb.freq(1000)
 
-        # for servos
-        self.pca = None
-        try:
-            i2c_pca = I2C(0, sda=Pin(PCA_SDA), scl=Pin(PCA_SCL), freq=400000)
-            self.pca = PCA9685(i2c_pca)
-            self.pca.freq(50)
-            self.manual_steer(90)
-        except:
-            pass
-
         # Compass
         self.compass = None
         try:
@@ -243,31 +232,6 @@ class Robot:
         self.dest_lat = None
         self.dest_lon = None
 
-    def set_servo_angle(self, channel, angle):
-        if not self.pca:
-            return
-        angle = max(0, min(180, angle))
-        pulse_us = 500 + (angle / 180.0) * 1900
-        duty = int((pulse_us / 20000) * 4096)
-        self.pca.duty(channel, duty)
-
-    def manual_steer(self, input_angle):
-        if not self.pca:
-            return
-        input_angle = max(45, min(135, input_angle))
-        dev = input_angle - 90
-        front, rear = 90 + dev, 90 - dev
-
-        self.set_servo_angle(SERVO_FL, front)
-        self.set_servo_angle(SERVO_FR, front)
-        time.sleep(0.02)
-        self.set_servo_angle(SERVO_RL, rear)
-        self.set_servo_angle(SERVO_RR, rear)
-        time.sleep(0.02)
-        time.sleep(0.3)
-
-        for i in [SERVO_FL, SERVO_FR, SERVO_RL, SERVO_RR]:
-            self.pca.duty(i, 0)
 
     def get_distance_cm(self):
         self.trig.low()
@@ -343,23 +307,23 @@ class Robot:
         self.ena.duty_u16(duty)
         self.enb.duty_u16(duty)
         if cmd == 'w':
-            self.m1.high()
-            self.m2.low()
+            self.m1.low()
+            self.m2.high()
             self.m3.high()
             self.m4.low()
         elif cmd == 's':
-            self.m1.low()
-            self.m2.high()
+            self.m1.high()
+            self.m2.low()
             self.m3.low()
             self.m4.high()
         elif cmd == 'a':
-            self.m1.low()
-            self.m2.high()
+            self.m1.high()
+            self.m2.low()
             self.m3.high()
             self.m4.low()
         elif cmd == 'd':
-            self.m1.high()
-            self.m2.low()
+            self.m1.low()
+            self.m2.high()
             self.m3.low()
             self.m4.high()
         elif cmd == 'x':
@@ -457,10 +421,6 @@ if lora.init_lora():
                     bot.auto_mode = False
                     bot.move('x', 0)
                     print("Auto-drive stopped")
-
-                elif cmd == "servo":
-                    bot.auto_mode = False
-                    bot.manual_steer(data.get("ang", 90))
 
                 else:
                     bot.auto_mode = False

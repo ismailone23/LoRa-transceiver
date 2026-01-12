@@ -18,7 +18,7 @@
       <div class="status-panel">
         <div class="stat-box">Temp<br><b id="temp">--</b>°C</div>
         <div class="stat-box">Humid<br><b id="humid">--</b>%</div>
-        <div class="stat-box">Dist<br><b id="dist">--</b>cm</div>
+        <div class="stat-box">Target Dist<br><b id="dist">--</b>m</div>
       </div>
 
       <div class="gps-info">
@@ -61,29 +61,8 @@
         <input type="range" min="0" max="100" value="75" oninput="updateSpeed(this.value)">
       </div>
 
-      <div class="steering-control">
-        <label>🎮 Steering Control: <span id="s1Val">90</span>°</label>
-        <div class="steering-wheel-container">
-          <svg id="steeringWheel" width="200" height="200" viewBox="0 0 200 200">
-            <circle cx="100" cy="100" r="80" fill="none" stroke="#667eea" stroke-width="8" />
-            <circle cx="100" cy="100" r="20" fill="#764ba2" />
-            <line x1="100" y1="20" x2="100" y2="80" stroke="#667eea" stroke-width="4" transform="rotate(0 100 100)"
-              id="spoke1" />
-            <line x1="100" y1="20" x2="100" y2="80" stroke="#667eea" stroke-width="4" transform="rotate(90 100 100)" />
-            <line x1="100" y1="20" x2="100" y2="80" stroke="#667eea" stroke-width="4" transform="rotate(180 100 100)" />
-            <line x1="100" y1="20" x2="100" y2="80" stroke="#667eea" stroke-width="4" transform="rotate(270 100 100)" />
-            <polygon points="100,15 95,25 105,25" fill="#f5576c" id="indicator" />
-          </svg>
-          <div class="steering-buttons">
-            <button class="steer-btn" onclick="steerLeft()">◄ LEFT</button>
-            <button class="steer-btn center" onclick="steerCenter()">● CENTER</button>
-            <button class="steer-btn" onclick="steerRight()">RIGHT ►</button>
-          </div>
-        </div>
-      </div>
-
       <div class="auto-control">
-        <h3>🎯 Auto-Drive Navigation</h3>
+        <h3>Auto-Drive Navigation</h3>
         <input type="number" id="targetLat" placeholder="Target Latitude" step="0.000001">
         <input type="number" id="targetLon" placeholder="Target Longitude" step="0.000001">
         <div class="flex">
@@ -97,10 +76,10 @@
       <h2>📍 Live Location Map (OpenStreetMap)</h2>
       <div id="map"></div>
       <div class="map-controls">
-        <button onclick="centerOnvehicle()">📍 Center on vehicle</button>
-        <button onclick="setDestinationFromMap()">🎯 Set Destination</button>
-        <button onclick="clearPath()">🗑️ Clear Path</button>
-        <button onclick="toggleSatellite()">🛰️ Toggle Satellite</button>
+        <button onclick="centerOnvehicle()">Center on vehicle</button>
+        <button onclick="setDestinationFromMap()">Set Destination</button>
+        <button onclick="clearPath()">Clear Path</button>
+        <button onclick="toggleSatellite()">Toggle Satellite</button>
       </div>
       <div id="log"></div>
     </div>

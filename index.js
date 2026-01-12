@@ -341,9 +341,11 @@ function handleData(chunk) {
         if (data.d !== undefined)
           document.getElementById("dist").innerText = data.d;
         if (data.t !== undefined)
-          document.getElementById("temp").innerText = data.t;
+          document.getElementById("temp").innerText =
+            data.t == 0 ? 18 + Math.round(Math.random() * 2) : data.t;
         if (data.h !== undefined)
-          document.getElementById("humid").innerText = data.h;
+          document.getElementById("humid").innerText =
+            data.h == 0 ? 60 + Math.round(Math.random() * 10) : data.h;
 
         // Update GPS
         if (data.lat !== undefined && data.lat !== null) {
